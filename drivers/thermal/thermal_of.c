@@ -331,7 +331,10 @@ static int of_thermal_get_trip_hyst(struct thermal_zone_device *tz, int trip,
 {
 	struct __thermal_zone *data = tz->devdata;
 
-	if (trip >= data->ntrips || trip < 0)
+	if (data == NULL || trip >= data->ntrips || trip < 0)
+		return -EDOM;
+
+	if (data->ops == NULL)
 		return -EDOM;
 
 	*hyst = data->trips[trip].hysteresis;
